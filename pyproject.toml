@@ -1,0 +1,25 @@
+[project]
+name = "django-blog"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "celery>=5.5.3",
+    "django>=5.2.4",
+    "django-celery-beat>=2.8.1",
+    "django-cors-headers>=4.7.0",
+    "django-filter>=25.1",
+    "django-mail-templated>=2.6.5",
+    "django-redis>=6.0.0",
+    "djangorestframework>=3.16.0",
+    "djangorestframework-simplejwt>=5.5.0",
+    "drf-yasg[validation]>=1.21.10",
+    "gunicorn>=23.0.0",
+    "markdown>=3.8.2",
+    "pillow>=11.3.0",
+    "pytest>=8.4.1",
+    "pytest-django>=4.11.1",
+    "python-decouple>=3.8",
+    "redis>=6.2.0",
+]
