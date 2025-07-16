@@ -1,4 +1,4 @@
-FROM python:3.13-slim-buster
+FROM python:3.13-alpine
 
 # Installing uv dependency manager
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
@@ -9,12 +9,11 @@ ENV PYTHONUNBUFFERED=1
 # Settings up the workdir
 WORKDIR /app
 
-# Copying crucial dependencies
-COPY pyproject.toml /app/
-COPY .python-version /app/
-COPY 5.2 /app/
-COPY uv.lock /app/
+# Copy dependency files first (better caching)
+COPY pyproject.toml uv.lock .python-version /app
 
+# Install dependencies
 RUN uv sync --locked
 
-COPY ./core /app/
+# Copy application code
+COPY ./core /app/core

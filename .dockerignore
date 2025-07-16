@@ -1,0 +1,6 @@
+# Common things that should be in .dockerignore:
+.git
+.venv
+__pycache__
+*.pyc
+.idea

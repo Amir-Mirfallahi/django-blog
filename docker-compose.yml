@@ -4,15 +4,15 @@ services:
     image: redis
     restart: always
     ports:
-    - "6379:6379"
+      - "6379:6379"
     command: redis-server --save 60 1 --loglevel warning
 
   backend:
     build: .
     container_name: backend
-    command: uv run gunicorn core.wsgi --bind 0.0.0.0:8000
+    command: uv run ./core/manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./core:/app
+      - ./core:/app/core
     ports:
       - "8000:8000"
     environment:
@@ -39,20 +39,20 @@ services:
       - backend
 
   smtp4dev:
-      image: rnwood/smtp4dev:v3
-      restart: always
-      ports:
-        # Change the number before : to the port the web interface should be accessible on
-        - '5000:80'
-        # Change the number before : to the port the SMTP server should be accessible on
-        - '25:25'
-        # Change the number before : to the port the IMAP server should be accessible on
-        - '143:143'
-      volumes:
-        # This is where smtp4dev stores the database..
-          - smtp4dev-data:/smtp4dev
-      environment:
-        - ServerOptions__HostName=smtp4dev
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      # Change the number before : to the port the web interface should be accessible on
+      - '5000:80'
+      # Change the number before : to the port the SMTP server should be accessible on
+      - '25:25'
+      # Change the number before : to the port the IMAP server should be accessible on
+      - '143:143'
+    volumes:
+      # This is where smtp4dev stores the database..
+      - smtp4dev-data:/smtp4dev
+    environment:
+      - ServerOptions__HostName=smtp4dev
 
 
 volumes:
