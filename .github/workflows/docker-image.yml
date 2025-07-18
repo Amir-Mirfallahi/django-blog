@@ -16,3 +16,25 @@ jobs:
         run: docker compose up -d
       - name: Run Tests
         run: docker compose exec backend sh -c "uv run pytest ./core"
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Start SSH agent and add key
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to Arvan Cloud
+        env:
+          HOST: ${{ secrets.ARVAN_HOST }}
+          USER: ${{ secrets.ARVAN_USER }}
+        run: |
+          ssh -o StrictHostKeyChecking=no $USER@$HOST "\
+            cd ${{ secrets.DEPLOY_PATH }} && \
+            git pull origin main && \
+            docker-compose -f docker-compose-stage.yml pull && \
+            docker-compose -f docker-compose-stage.yml up -d --build \
+          "
