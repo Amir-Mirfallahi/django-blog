@@ -83,12 +83,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     "default": {
-        "ENGINE": config("DB_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": config("DB_NAME", BASE_DIR / "db.sqlite3"),
-        "USERNAME": config("DB_USERNAME"),
+        "ENGINE": config("DB_ENGINE", default="django.db.backends.sqlite3"),
+        "NAME": config("DB_NAME", default=BASE_DIR / "db.sqlite3"),
+        "USER": config("DB_USERNAME"),
         "PASSWORD": config("DB_PASSWORD"),
         "HOST": config("DB_HOST"),
-        "PORT": config("DB_PORT")
+        "PORT": config("DB_PORT"),
     }
 }
 

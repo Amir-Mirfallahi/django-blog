@@ -35,6 +35,7 @@ services:
       - DEBUG=False
     depends_on:
       - redis
+      - db
 
   worker:
     build: .
