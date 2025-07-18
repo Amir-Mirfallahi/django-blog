@@ -15,6 +15,7 @@ dependencies = [
     "djangorestframework>=3.16.0",
     "djangorestframework-simplejwt>=5.5.0",
     "drf-yasg[validation]>=1.21.10",
+    "faker>=37.4.2",
     "gunicorn>=23.0.0",
     "markdown>=3.8.2",
     "pillow>=11.3.0",

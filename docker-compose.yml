@@ -18,22 +18,23 @@ services:
     environment:
       - SECRET_KEY=test
       - DEBUG=True
+      - DJANGO_SETTINGS_MODULE="core.settings"
     depends_on:
       - redis
 
   worker:
     build: .
-    command: uv run celery -A core worker --loglevel=info
+    command: sh -c "cd core && uv run celery -A core worker --loglevel=info"
     volumes:
-      - ./core:/app
+      - ./core:/app/core
     depends_on:
       - redis
       - backend
   beat:
     build: .
-    command: uv run celery -A core beat --loglevel=info
+    command: sh -c "cd core && uv run celery -A core beat --loglevel=info"
     volumes:
-      - ./core:/app
+      - ./core:/app/core
     depends_on:
       - redis
       - backend

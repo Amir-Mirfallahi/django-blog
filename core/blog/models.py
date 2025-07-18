@@ -2,11 +2,6 @@ from django.db import models
 from django.urls import reverse
 
 # Create your models here.
-
-# getting user model object
-# User = get_user_model()
-
-
 class Post(models.Model):
     """
     this is a class to define posts for blog app
@@ -15,6 +10,9 @@ class Post(models.Model):
     author = models.ForeignKey("accounts.Profile", on_delete=models.CASCADE)
     image = models.ImageField(null=True, blank=True)
     title = models.CharField(max_length=250)
+    slug = models.SlugField(max_length=250, unique=True)
+    read_time = models.IntegerField(default=2)
+    views = models.IntegerField(default=0)
     content = models.TextField()
     status = models.BooleanField()
     category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True)
