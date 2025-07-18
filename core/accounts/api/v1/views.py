@@ -25,9 +25,10 @@ from django.shortcuts import get_object_or_404
 from mail_templated import EmailMessage
 import jwt
 from django.conf import settings
+from ...tasks import send_email
 
 
-from ..utils import EmailThread, get_tokens_for_user_util  # Import the utility function
+from ..utils import get_tokens_for_user_util  # Import the utility function
 from accounts.models import UsedToken  # Import the UsedToken model
 
 User = get_user_model()
@@ -59,7 +60,7 @@ class RegistrationApiView(GenericAPIView):
                 "admin@admin.com",
                 [email],
             )
-            EmailThread(email_obj).start()
+            send_email.delay(email_obj)
             # serializer.data.pop('password')
             return Response(data, status=status.HTTP_201_CREATED)
         else:
@@ -205,7 +206,7 @@ class ActivationResendApiView(GenericAPIView):
             "admin@admin.com",
             [user_obj.email],
         )
-        EmailThread(email_obj).start()
+        send_email.delay(email_obj)
         return Response(
             {"details": "User activation resend successfully."},
             status=status.HTTP_200_OK,
@@ -233,7 +234,7 @@ class ResetPasswordApiView(GenericAPIView):
         email_obj = EmailMessage(
             "email/reset_password.tpl", {"token": token}, "admin@admin.com", [email]
         )
-        EmailThread(email_obj).start()
+        send_email.delay(email_obj)
 
         return Response(
             {"details": "Sent reset password email."}, status=status.HTTP_200_OK
