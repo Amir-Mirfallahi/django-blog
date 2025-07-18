@@ -12,10 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Docker-Compose
-        run: docker compose up -d
       - name: Run Tests
-        run: docker compose exec backend sh -c "uv run pytest ./core"
+        run: docker compose run --rm backend sh -c "uv run pytest ./core"
   deploy:
     runs-on: ubuntu-latest
     needs: test
