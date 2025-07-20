@@ -1,5 +1,5 @@
 from django import forms
-from .models import Post
+from .models import Post, Category
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -37,4 +37,16 @@ class PostForm(forms.ModelForm):
                 "type": "date",
                 "class": "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
             }),
+        }
+
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ("name",)
+        widgets = {
+            "name": forms.TextInput(attrs={
+                    "class": "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary",
+                    "placeholder": "Enter category name."
+                }),
         }

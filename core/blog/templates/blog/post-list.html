@@ -1,13 +1,13 @@
 {% extends 'layout.html' %}
 
-{% block title %}Home - Blog{% endblock %}
+{% block title %}My Posts - Blog{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto">
     <!-- Hero Section -->
     <div class="bg-gradient-to-r from-blue-600 to-purple-700 rounded-lg p-8 text-white mb-12">
-        <h1 class="text-4xl font-bold mb-4">Welcome to Blog</h1>
-        <p class="text-xl opacity-90">Discover insightful articles and stories about technology, life, and everything in
+        <h1 class="text-4xl font-bold mb-4">Your posts are here</h1>
+        <p class="text-xl opacity-90">Write insightful articles and stories about technology, life, and everything in
             between.</p>
     </div>
 
@@ -16,11 +16,11 @@
         <form class="flex flex-col sm:flex-row gap-4" action="{% url 'blog:home' %}" method="GET">
             <div class="flex-1">
                 <input type="text" placeholder="Search articles..." name="query"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
             </div>
             <div class="flex gap-2">
                 <select name="categories"
-                        class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                    class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
                     <option value="all">All Categories</option>
                     {% for category in categories %}
                     <option value="{{ category.id }}">{{ category.name }}</option>
@@ -41,7 +41,8 @@
                 {% if post.image %}
                 <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-full object-cover">
                 {% else %}
-                <div class="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                <div
+                    class="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
                     <span class="text-white text-2xl font-bold">{{ post.title|first }}</span>
                 </div>
                 {% endif %}
@@ -50,7 +51,7 @@
                 <div class="flex items-center text-sm text-gray-500 mb-2">
                     <span>{{ post.category.name }}</span>
                     <span class="mx-2">•</span>
-                    <span>{{ post.created_at|date:"M d, Y" }}</span>
+                    <span>{{ post.created_date|date:"M d, Y" }}</span>
                 </div>
                 <h2 class="text-xl font-semibold text-gray-900 mb-3 hover:text-primary transition-colors">
                     <a href="{% url 'blog:post-detail' post.slug %}">{{ post.title }}</a>
@@ -58,21 +59,21 @@
                 <p class="text-gray-600 mb-4">{{ post.excerpt|truncatewords:20 }}</p>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center text-sm text-gray-500">
-                        <span>By {{ post.author.first_name }} {{ post.author.last_name }}</span>
+                        <span>By You</span>
                     </div>
                     <div class="flex items-center gap-4 text-sm text-gray-500">
                         <span class="flex items-center gap-1">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                                <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                                 <path fill-rule="evenodd"
-                                      d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
                             {{ post.views }}
                         </span>
                         <span class="flex items-center gap-1">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd"
-                                      d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z"/>
+                                    d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" />
                             </svg>
                             {{ post.comments.count }}
                         </span>
@@ -83,8 +84,8 @@
         {% empty %}
         <div class="col-span-full text-center py-12">
             <div class="text-gray-400 text-6xl mb-4">📝</div>
-            <h3 class="text-xl font-semibold text-gray-700 mb-2">No posts yet</h3>
-            <p class="text-gray-500">Check back later for new content!</p>
+            <h3 class="text-xl font-semibold text-gray-700 mb-2">No posts created yet</h3>
+            <p class="text-gray-500">Try creating your first article!</p>
         </div>
         {% endfor %}
     </div>
@@ -95,7 +96,7 @@
         <nav class="flex space-x-2">
             {% if page_obj.has_previous %}
             <a href="?page={{ page_obj.previous_page_number }}"
-               class="px-3 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+                class="px-3 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
                 Previous
             </a>
             {% endif %}
@@ -103,20 +104,19 @@
             {% for num in page_obj.paginator.page_range %}
             {% if page_obj.number == num %}
             <span class="px-3 py-2 bg-primary text-white rounded-md">{{ num }}</span>
-            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-            <a href="?page={{ num }}"
-               class="px-3 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %} <a href="?page={{ num }}"
+                class="px-3 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
                 {{ num }}
-            </a>
-            {% endif %}
-            {% endfor %}
+                </a>
+                {% endif %}
+                {% endfor %}
 
-            {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}"
-               class="px-3 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
-                Next
-            </a>
-            {% endif %}
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}"
+                    class="px-3 py-2 bg-white border border-gray-300 rounded-md hover:bg-gray-50 transition-colors">
+                    Next
+                </a>
+                {% endif %}
         </nav>
     </div>
     {% endif %}

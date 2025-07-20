@@ -10,7 +10,7 @@ services:
   backend:
     build: .
     container_name: backend
-    command: sh -c "cd ./core && uv run manage.py runserver 0.0.0.0:8000"
+    command: sh -c "cd ./core && uv run manage.py makemigrations && uv run manage.py migrate && uv run manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./core:/app/core
     ports:

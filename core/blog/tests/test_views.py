@@ -51,7 +51,7 @@ class TestHomeView:
 
 @pytest.mark.django_db
 class TestPostDetailView:
-    def test_post_detail_view_get(self, client, create_profile):
+    def test_post-detail_view_get(self, client, create_profile):
         category = Category.objects.create(name="Test Category")
         post = Post.objects.create(
             author=create_profile,
@@ -62,7 +62,7 @@ class TestPostDetailView:
             category=category,
             published_date=timezone.now()
         )
-        url = reverse("blog:post_detail", kwargs={"slug": post.slug})
+        url = reverse("blog:post-detail", kwargs={"slug": post.slug})
         response = client.get(url)
         assert response.status_code == 200
         assert "blog/post-detail.html" in [t.name for t in response.templates]

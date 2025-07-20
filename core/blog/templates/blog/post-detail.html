@@ -22,9 +22,18 @@
             <div class="flex items-center text-sm text-gray-500 mb-4">
                 <span class="bg-primary text-white px-3 py-1 rounded-full text-xs font-medium">{{ post.category.name }}</span>
                 <span class="mx-3">•</span>
-                <span>{{ post.created_at|date:"F d, Y" }}</span>
+                <span>{{ post.created_date|date:"F d, Y" }}</span>
                 <span class="mx-3">•</span>
                 <span>{{ post.read_time }} min read</span>
+                <span class="mx-3">•</span>
+                
+                {% if post.author == user.profile %}
+                <a href="{% url 'blog:post-update' post.slug %}" class="text-blue-700">
+                    Update
+                </a>
+                <span class="mx-3">•</span>
+                <a class="text-red-500" href="{% url 'blog:post-delete' post.slug %}">Delete</a>
+                {% endif %}
             </div>
 
             <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ post.title }}</h1>
@@ -35,8 +44,8 @@
                         {{ post.author.first_name }}
                     </div>
                     <div class="ml-3">
-                        <p class="text-sm font-medium text-gray-900">{{ post.author.first_name }} {{
-                            post.author.last_name }}</p>
+                        <p class="text-sm font-medium text-gray-900">{{ post.author.first_name }}
+                            {{ post.author.last_name }}</p>
                         <p class="text-sm text-gray-500">{{ post.author.profile.bio|default:"Blog Author" }}</p>
                     </div>
                 </div>
@@ -210,7 +219,7 @@
                         <span>{{ related_post.created_at|date:"M d, Y" }}</span>
                     </div>
                     <h3 class="text-lg font-semibold text-gray-900 mb-2 hover:text-primary transition-colors">
-                        <a href="{% url 'blog:post_detail' related_post.slug %}">{{ related_post.title }}</a>
+                        <a href="{% url 'blog:post-detail' related_post.slug %}">{{ related_post.title }}</a>
                     </h3>
                     <p class="text-gray-600 text-sm">{{ related_post.excerpt|truncatewords:15 }}</p>
                 </div>

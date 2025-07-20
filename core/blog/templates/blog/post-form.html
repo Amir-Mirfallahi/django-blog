@@ -22,9 +22,11 @@
             {% csrf_token %}
             {{ form.as_p }}
             <button type="submit"
-                    class="px-6 py-2 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">
+                    class="px-6 py-2  mt-3 bg-primary text-white rounded-md hover:bg-blue-700 transition-colors">
                 Post it
             </button>
+            <p class="py-2">Looking for another category?</span>
+            <a href="{% url 'blog:create-category' %}" class="text-blue-600">Create it</a>
         </form>
     </div>
 </div>

@@ -19,24 +19,19 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: test
-    if: github.event_name == 'push'
+    name: Deploy
+    needs: Test
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Start SSH agent and add key
-        uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Deploy to Arvan Cloud
-        env:
-          HOST: ${{ secrets.ARVAN_HOST }}
-          USER: ${{ secrets.ARVAN_USER }}
-        run: |
-          ssh -o StrictHostKeyChecking=no $USER@$HOST "\
-            cd ${{ secrets.DEPLOY_PATH }} && \
-            git pull origin main && \
-            docker-compose -f docker-compose-stage.yml pull && \
-            docker-compose -f docker-compose-stage.yml up -d --build \
+    - uses: actions/checkout@v3
+    - name: Connect and Execute Commands
+      uses: appleboy/ssh-action@master
+      with:
+        username: ${{secrets.ARVAN_USER}}
+        host: ${{secrets.ARVAN_HOST}}
+        script: |
+          cd ${{secrets.DEPLOY_PATH}}
+          docker-compose -f docker-compose-stage.yml stop
+          git pull
+          docker-compose -f docker-compose-stage.yml restart
           "

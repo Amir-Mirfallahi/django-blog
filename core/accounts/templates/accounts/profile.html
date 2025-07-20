@@ -1,0 +1,187 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}User Profile{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+
+    <!-- Messages Framework -->
+    {% if messages %}
+    <div class="mb-6">
+        {% for message in messages %}
+        <div class="p-4 rounded-md {% if message.tags == 'success' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}"
+            role="alert">
+            <p class="font-bold">{% if message.tags == 'success' %}Success{% else %}Error{% endif %}</p>
+            <p>{{ message }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="bg-white p-8 rounded-lg shadow-md">
+        <div class="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
+            <!-- Profile Image -->
+            <div class="flex-shrink-0">
+                {% if request.user.profile.image %}
+                <img class="h-40 w-40 rounded-full object-cover border-4 border-gray-200"
+                    src="{{ request.user.profile.image.url }}"
+                    alt="Profile image of {{ request.user.profile.first_name }}">
+                {% else %}
+                <div
+                    class="h-40 w-40 rounded-full bg-gray-200 flex items-center justify-center border-4 border-gray-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-20 w-20 text-gray-500" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Profile Details -->
+            <div class="flex-1 text-center md:text-left">
+                <h1 class="text-3xl font-bold text-gray-900">
+                    {% if request.user.profile.first_name and request.user.profile.last_name %}
+                    {{ request.user.profile.first_name }} {{ request.user.profile.last_name }}
+                    {% else %}
+                    {{ request.user.email }}
+                    {% endif %}
+                </h1>
+                <p class="text-md text-gray-500 mt-1">{{ request.user.email }}</p>
+                <p class="text-sm text-gray-400 mt-2">
+                    User since {{ request.user.created_date|date:"F Y" }}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="mt-8" x-data="{ activeTab: 'profile' }">
+        <div class="border-b border-gray-200">
+            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                <button @click="activeTab = 'profile'"
+                    :class="{ 'border-primary text-primary': activeTab === 'profile', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'profile' }"
+                    class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    Edit Profile
+                </button>
+                <button @click="activeTab = 'email'"
+                    :class="{ 'border-primary text-primary': activeTab === 'email', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'email' }"
+                    class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    Change Email
+                </button>
+                <button @click="activeTab = 'password'"
+                    :class="{ 'border-primary text-primary': activeTab === 'password', 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300': activeTab !== 'password' }"
+                    class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+                    Change Password
+                </button>
+            </nav>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="mt-6">
+            <!-- Profile Update Form -->
+            <div x-show="activeTab === 'profile'" class="bg-white p-8 rounded-lg shadow-md">
+                <form method="post" action="{% url 'accounts:profile' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <h2 class="text-xl font-semibold text-gray-800 mb-6">Profile Information</h2>
+                    <div class="space-y-6">
+                        {% for field in profile_form %}
+                        <div>
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{
+                                field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                            <p class="mt-2 text-sm text-gray-500">{{ field.help_text }}</p>
+                            {% endif %}
+                            {% for error in field.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-8 pt-5">
+                        <div class="flex justify-end">
+                            <button type="submit" name="update_profile"
+                                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                                Save Changes
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Email Change Form -->
+            <div x-show="activeTab === 'email'" class="bg-white p-8 rounded-lg shadow-md">
+                <form method="post" action="{% url 'accounts:profile' %}">
+                    {% csrf_token %}
+                    <h2 class="text-xl font-semibold text-gray-800 mb-6">Change Email Address</h2>
+                    <div class="space-y-6">
+                        {% for field in email_form %}
+                        <div>
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{
+                                field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                            <p class="mt-2 text-sm text-gray-500">{{ field.help_text }}</p>
+                            {% endif %}
+                            {% for error in field.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-8 pt-5">
+                        <div class="flex justify-end">
+                            <button type="submit" name="change_email"
+                                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                                Change Email
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Password Change Form -->
+            <div x-show="activeTab === 'password'" class="bg-white p-8 rounded-lg shadow-md">
+                <form method="post" action="{% url 'accounts:password_change' %}">
+                    {% csrf_token %}
+                    <h2 class="text-xl font-semibold text-gray-800 mb-6">Change Password</h2>
+                    {% with password_form as form %}
+                    <div class="space-y-6">
+                        {% for field in form %}
+                        <div>
+                            <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{
+                                field.label }}</label>
+                            <input type="{{ field.field.widget.input_type }}" name="{{ field.name }}"
+                                id="{{ field.id_for_label }}"
+                                class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+                            {% if field.help_text %}
+                            <p class="mt-2 text-sm text-gray-500">{{ field.help_text|safe }}</p>
+                            {% endif %}
+                            {% for error in field.errors %}
+                            <p class="mt-2 text-sm text-red-600">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-8 pt-5">
+                        <div class="flex justify-end">
+                            <button type="submit"
+                                class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                                Change Password
+                            </button>
+                        </div>
+                    </div>
+                    {% endwith %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- AlpineJS for simple tab interactivity -->
+<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+{% endblock %}

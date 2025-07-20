@@ -9,3 +9,7 @@ Then you can go to `localhost` and see the website
 
 to create new superuser run this command:
 `docker compose -f docker-compose-stage.yml exec backend sh -c "uv run /app/core/manage.py createsuperuser"`
+
+# Options
+
+- It removes unused categories automatically every day

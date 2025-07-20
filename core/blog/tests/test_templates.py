@@ -52,7 +52,7 @@ class TestHomeTemplate:
 
 @pytest.mark.django_db
 class TestPostDetailTemplate:
-    def test_post_detail_template_renders_correctly(self, client, create_profile):
+    def test_post-detail_template_renders_correctly(self, client, create_profile):
         category = Category.objects.create(name="Test Category")
         post = Post.objects.create(
             author=create_profile,
@@ -63,7 +63,7 @@ class TestPostDetailTemplate:
             category=category,
             published_date=timezone.now()
         )
-        url = reverse("blog:post_detail", kwargs={"slug": post.slug})
+        url = reverse("blog:post-detail", kwargs={"slug": post.slug})
         response = client.get(url)
         assert response.status_code == 200
         assert post.title in response.content.decode()
